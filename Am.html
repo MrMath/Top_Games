@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تحدي الجيم 💪</title>
+    <style>
+        body { font-family: Tahoma; background: #162447; color: #fff; text-align: center; padding: 50px; }
+        .box { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; }
+        button { background: #e43f5a; color: white; border: none; padding: 10px 15px; margin: 5px; border-radius: 5px; cursor: pointer; width: 100%; font-size: 16px; }
+        button:hover { background: #ff4757; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>🏋️ تحدي الالتزام بالجيم</h2>
+        <p id="q">صحيت كسلان، هتعمل إيه؟</p>
+        <div id="btns">
+            <button onclick="next(10)">أنزل الجيم وأتمرن بقوة 🔥</button>
+            <button onclick="next(0)">أنام وأضيع اليوم 😴</button>
+        </div>
+        <p id="score"></p>
+    </div>
+<script>
+let step = 0;
+function next(pts) {
+    step++;
+    if(step === 1) {
+        document.getElementById("q").innerText = "إيه أهم حاجة للاستمرارية؟ 🎯";
+        document.getElementById("btns").innerHTML = `
+            <button onclick="end(10 + ${pts})">التغذية والجدول المنتظم 🥗</button>
+            <button onclick="end(2 + ${pts})">العشوائية وخلاص 📉</button>`;
+    }
+}
+function end(total) {
+    document.getElementById("q").innerText = "انتهى التحدي! 🎉";
+    document.getElementById("btns").innerHTML = `مجموع نقاطك: ${total} / 20 <br>أنت بطل مستمر! 💪`;
+}
+</script>
+</body>
+</html>
