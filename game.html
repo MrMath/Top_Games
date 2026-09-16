@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طاقة الأبطال: عهد الألياف والعضلات</title>
+    <style>
+        :root {
+            --primary-color: #00ff88;
+            --secondary-color: #ff3366;
+            --dark-bg: #0f1016;
+            --card-bg: #1a1c29;
+            --text-color: #ffffff;
+            --text-dim: #a0a5c0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin: 0 0 5px 0;
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* لوحة معلومات البطل */
+        .avatar-section {
+            background: linear-gradient(135deg, #25283c, #161824);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            margin-bottom: 20px;
+            border: 2px solid var(--primary-color);
+        }
+
+        .avatar-img {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        .avatar-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .avatar-rank {
+            color: var(--secondary-color);
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* مؤشرات الطاقة والقوة */
+        .stats-container {
+            margin-bottom: 20px;
+        }
+
+        .stat-bar-group {
+            margin-bottom: 12px;
+        }
+
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #2c2f48;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 50%;
+            transition: width 0.4s ease;
+        }
+
+        .muscle-fill { background-color: var(--primary-color); }
+        .fuel-fill { background-color: #3399ff; }
+        .stamina-fill { background-color: var(--secondary-color); }
+
+        /* أزرار التفاعل (الأفعال اليومية) */
+        .actions-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            background: #2c2f48;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-btn:hover {
+            background: #3a3f63;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.gym { border-bottom: 3px solid var(--primary-color); }
+        .action-btn.food { border-bottom: 3px solid #3399ff; }
+
+        /* سجل المغامرة */
+        .log-box {
+            background: #0f1016;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            height: 80px;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <header>
+            <h1>طاقة الأبطال: عهد الألياف</h1>
+            <p>حوّل تدريباتك ووجباتك إلى قوة خارقة</p>
+        </header>
+
+        <!-- قسم البطل -->
+        <div class="avatar-section">
+            <div class="avatar-img">🦾🛡️</div>
+            <div class="avatar-name">البطل المغوار</div>
+            <div class="avatar-rank">المستوى: 1 (متدرب صالة)</div>
+        </div>
+
+        <!-- مؤشرات الأداء -->
+        <div class="stats-container">
+            <div class="stat-bar-group">
+                <div class="stat-label">
+                    <span>كتلة القوة والعضلات (GYM)</span>
+                    <span id="muscle-val">45%</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="muscle-bar" class="progress-fill muscle-fill" style="width: 45%;"></div>
+                </div>
+            </div>
+
+            <div class="stat-bar-group">
+                <div class="stat-label">
+                    <span>وقود التغذية الصحية (Nutrition)</span>
+                    <span id="fuel-val">60%</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="fuel-bar" class="progress-fill fuel-fill" style="width: 60%;"></div>
+                </div>
+            </div>
+
+            <div class="stat-bar-group">
+                <div class="stat-label">
+                    <span>مستوى التحمل (Stamina)</span>
+                    <span id="stamina-val">50%</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="stamina-bar" class="progress-fill stamina-fill" style="width: 50%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- أزرار تفاعل اللاعب -->
+        <div class="actions-section">
+            <button class="action-btn gym" onclick="completeWorkout()">
+                <span>🏋️‍♂️ إتمام تمرينة جيم</span>
+                <small style="color:var(--primary-color)">+15 عضلات</small>
+            </button>
+            <button class="action-btn food" onclick="eatHealthyMeal()">
+                <span>🥗 تسجيل وجبة صحية</span>
+                <small style="color:#3399ff">+20 وقود وطاقة</small>
+            </button>
+        </div>
+
+        <!-- سجل الأحداث -->
+        <div class="log-box" id="game-log">
+            [النظام]: أهلاً بك في عالم بومبيلا. ابدأ بتسجيل تمارينك ووجباتك لتقوية بطلك!
+        </div>
+    </div>
+
+    <script>
+        let stats = {
+            muscle: 45,
+            fuel: 60,
+            stamina: 50
+        };
+
+        function updateUI() {
+            document.getElementById('muscle-bar').style.width = stats.muscle + '%';
+            document.getElementById('muscle-val').innerText = stats.muscle + '%';
+
+            document.getElementById('fuel-bar').style.width = stats.fuel + '%';
+            document.getElementById('fuel-val').innerText = stats.fuel + '%';
+
+            document.getElementById('stamina-bar').style.width = stats.stamina + '%';
+            document.getElementById('stamina-val').innerText = stats.stamina + '%';
+        }
+
+        function logMessage(msg) {
+            const logBox = document.getElementById('game-log');
+            logBox.innerHTML += `<br>[حدث]: ${msg}`;
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function completeWorkout() {
+            stats.muscle = Math.min(100, stats.muscle + 15);
+            stats.stamina = Math.max(0, stats.stamina - 10); // التمارين تستهلك طاقة مؤقتاً
+            updateUI();
+            logMessage("أنجزت تمرينة قوية في الجيم! زادت كتلة العضلات.");
+        }
+
+        function eatHealthyMeal() {
+            stats.fuel = Math.min(100, stats.fuel + 20);
+            stats.stamina = Math.min(100, stats.stamina + 25); // الوجبة الصحية تعيد الشحن
+            updateUI();
+            logMessage("تناولت وجبة غنية بالبروتين والكربوهيدرات النظيفة! تم شحن الوقود.");
+        }
+    </script>
+</body>
+</html>
