@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بطل الوقت الصغير - النسخة الشاملة</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #2d3436;
+        }
+        .container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 900px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            padding: 20px;
+            text-align: center;
+            border: 6px solid #ffeaa7;
+        }
+        h1 {
+            color: #d63031;
+            margin: 0 0 5px 0;
+            font-size: 24px;
+        }
+        .mode-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .mode-btn {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 3px 0 #4834d4;
+        }
+        .mode-btn.active {
+            background: #00b894;
+            box-shadow: 0 3px 0 #00896f;
+        }
+        /* قسم الساعات */
+        .clocks-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .clock-card {
+            background: #f1f2f6;
+            border-radius: 20px;
+            padding: 12px;
+            width: 300px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 3px solid #dfe4ea;
+            position: relative;
+        }
+        .sun-moon {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 22px;
+        }
+        .clock-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #2f3542;
+            margin-bottom: 8px;
+        }
+        .analog-clock {
+            width: 170px;
+            height: 170px;
+            background: white;
+            border: 7px solid #2f3542;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        .clock-number {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            text-align: center;
+            line-height: 25px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #2d3436;
+        }
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            border-radius: 5px;
+            transition: transform 0.5s ease-in-out; /* حركة سلسة للعقارب */
+        }
+        .hour-hand {
+            width: 5px;
+            height: 45px;
+            background: #ff4757;
+            transform: translateX(-50%) rotate(0deg);
+            z-index: 3;
+        }
+        .minute-hand {
+            width: 3px;
+            height: 65px;
+            background: #2ed573;
+            transform: translateX(-50%) rotate(0deg);
+            z-index: 2;
+        }
+        .clock-center {
+            width: 10px;
+            height: 10px;
+            background: #2f3542;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 4;
+        }
+        .digital-display {
+            font-size: 20px;
+            font-weight: bold;
+            color: #0984e3;
+            background: white;
+            padding: 3px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            border: 2px dashed #74b9ff;
+        }
+        /* لوحات التحكم */
+        .panel {
+            background: #dfe6e9;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        .tasks-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .task-btn {
+            background: #ffeaa7;
+            border: 2px solid #fdcb6e;
+            padding: 6px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            color: #2d3436;
+        }
+        .task-btn:hover { background: #fdcb6e; }
+        .control-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        select {
+            padding: 6px 10px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: 2px solid #b2bec3;
+            font-family: inherit;
+        }
+        .btn-op {
+            background-color: #00b894;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #00896f;
+        }
+        .btn-minus {
+            background-color: #e17055;
+            box-shadow: 0 3px 0 #c0392b;
+        }
+        .info-msg {
+            margin-top: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #d63031;
+        }
+        /* تصميم وضع التحدي */
+        #quiz-section {
+            display: none;
+        }
+        .quiz-box {
+            font-size: 18px;
+            font-weight: bold;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            color: #2d3436;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .quiz-opt-btn {
+            background: #0984e3;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #0973c7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🦊 بطل الوقت الصغير</h1>
+        <div class="mode-buttons">
+            <button class="mode-btn active" id="btnLab" onclick="switchMode('lab')">⏱️ مختبر الوقت الاستكشافي</button>
+            <button class="mode-btn" id="btnQuiz" onclick="switchMode('quiz')">🎮 تحدي الأبطال والنجوم</button>
+        </div>
+
+        <!-- نظام عرض الساعات (مشترك) -->
+        <div class="clocks-grid">
+            <div class="clock-card">
+                <div class="sun-moon" id="sunMoon1">☀️</div>
+                <div class="clock-title">⌚ ساعة البداية</div>
+                <div class="analog-clock" id="clock1">
+                    <div class="hand hour-hand" id="hourHand1"></div>
+                    <div class="hand minute-hand" id="minuteHand1"></div>
+                    <div class="clock-center"></div>
+                </div>
+                <div class="digital-display" id="digital1">12:00</div>
+            </div>
+
+            <div class="clock-card" style="border-color: #55efc4;">
+                <div class="sun-moon" id="sunMoon2">☀️</div>
+                <div class="clock-title" style="color: #00b894;">✨ ساعة النتيجة</div>
+                <div class="analog-clock" id="clock2">
+                    <div class="hand hour-hand" id="hourHand2"></div>
+                    <div class="hand minute-hand" id="minuteHand2"></div>
+                    <div class="clock-center"></div>
+                </div>
+                <div class="digital-display" id="digital2" style="color: #00b894; border-color: #55efc4;">12:00</div>
+            </div>
+        </div>
+
+        <!-- وضع المختبر (استكشاف حر + مهام واقعية + جمع وطرح) -->
+        <div class="panel" id="lab-section">
+            <div class="tasks-bar">
+                <span style="font-weight: bold; align-self: center;">مشاهد يومية:</span>
+                <button class="task-btn" onclick="setTaskTime(7, 30)">🎒 الطابور (7:30)</button>
+                <button class="task-btn" onclick="setTaskTime(10, 0)">🎨 حصة الرسم (10:00)</button>
+                <button class="task-btn" onclick="setTaskTime(11, 30)">⚽ وقت الفسحة (11:30)</button>
+                <button class="task-btn" onclick="setTaskTime(1, 0)">🏠 الخروج (1:00)</button>
+            </div>
+
+            <div class="control-group">
+                <label>الساعات:</label>
+                <select id="selectHour" onchange="updateCustomTime()"></select>
+                <label>الدقائق:</label>
+                <select id="selectMinute" onchange="updateCustomTime()"></select>
+            </div>
+
+            <div class="control-group">
+                <label>الفترة:</label>
+                <select id="timeDelta">
+                    <option value="5">5 دقائق</option>
+                    <option value="10">10 دقائق</option>
+                    <option value="15">15 دقيقة</option>
+                    <option value="20">20 دقيقة</option>
+                    <option value="25">25 دقيقة</option>
+                    <option value="30" selected>30 دقيقة</option>
+                    <option value="35">35 دقيقة</option>
+                    <option value="40">40 دقيقة</option>
+                    <option value="45">45 دقيقة</option>
+                    <option value="50">50 دقيقة</option>
+                    <option value="55">55 دقيقة</option>
+                </select>
+                <button class="btn-op" onclick="calculateTime('add')">➕ جمع</button>
+                <button class="btn-op btn-minus" onclick="calculateTime('subtract')">➖ طرح</button>
+            </div>
+            <div class="info-msg" id="infoMsg">اختر وقتاً أو مهمة واكتشف النتيجة!</div>
+        </div>
+
+        <!-- وضع التحدي والمسابقات (Quiz Mode) -->
+        <div class="panel" id="quiz-section">
+            <div style="font-weight: bold; color: #e17055; margin-bottom: 5px;">النجوم: <span id="quizStars">⭐ 0</span></div>
+            <div class="quiz-box" id="quizQuestion">جاري تجهيز التحدي...</div>
+            <div class="options-grid" id="quizOptions"></div>
+            <div class="info-msg" id="quizFeedback"></div>
+        </div>
+    </div>
+
+    <script>
+        // دالة إنشاء الأرقام للساعات
+        function createClockNumbers(clockId) {
+            const clock = document.getElementById(clockId);
+            const radius = 62;
+            const centerX = 85;
+            const centerY = 85;
+            for (let i = 1; i <= 12; i++) {
+                let angle = (i * 30 - 90) * (Math.PI / 180);
+                let x = centerX + radius * Math.cos(angle) - 12;
+                let y = centerY + radius * Math.sin(angle) - 12;
+                let num = document.createElement('div');
+                num.className = 'clock-number';
+                num.innerText = i;
+                num.style.left = `${x}px`;
+                num.style.top = `${y}px`;
+                clock.appendChild(num);
+            }
+        }
+        createClockNumbers('clock1');
+        createClockNumbers('clock2');
+
+        // تعبئة القوائم المنسدلة
+        const hourSel = document.getElementById('selectHour');
+        for (let i = 1; i <= 12; i++) { hourSel.add(new Option(i + " ساعات", i)); }
+        const minSel = document.getElementById('selectMinute');
+        for (let i = 0; i < 60; i += 5) { minSel.add(new Option((i<10?"0"+i:i) + " دقيقة", i)); }
+
+        let currentTotalMins = 12 * 60;
+
+        function updateClockDisplay(totalMins, hHandId, mHandId, digId, sunMoonId) {
+            totalMins = (totalMins + 720) % 720;
+            let hours = Math.floor(totalMins / 60);
+            let minutes = totalMins % 60;
+            if (hours === 0) hours = 12;
+
+            let minAngle = minutes * 6;
+            let hourAngle = (hours % 12) * 30 + minutes * 0.5;
+
+            document.getElementById(mHandId).style.transform = `translateX(-50%) rotate(${minAngle}deg)`;
+            document.getElementById(hHandId).style.transform = `translateX(-50%) rotate(${hourAngle}deg)`;
+
+            let fmtMin = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById(digId).innerText = `${hours}:${fmtMin}`;
+
+            // مؤشر الشمس والقمر (بعد الساعة 12 ظهراً يتحول لقمر تقريبي)
+            if (hours >= 6 && hours < 12 && hours !== 12) {
+                document.getElementById(sunMoonId).innerText = "☀️";
+            } else {
+                document.getElementById(sunMoonId).innerText = "🌙";
+            }
+            return totalMins;
+        }
+
+        function updateCustomTime() {
+            let h = parseInt(hourSel.value);
+            let m = parseInt(minSel.value);
+            if (h === 12) h = 0;
+            currentTotalMins = (h * 60) + m;
+            updateClockDisplay(currentTotalMins, 'hourHand1', 'minuteHand1', 'digital1', 'sunMoon1');
+            updateClockDisplay(currentTotalMins, 'hourHand2', 'minuteHand2', 'digital2', 'sunMoon2');
+            document.getElementById('infoMsg').innerText = "تم تحديث الساعة الأصلية!";
+        }
+
+        function setTaskTime(h, m) {
+            hourSel.value = h;
+            minSel.value = m;
+            updateCustomTime();
+        }
+
+        function calculateTime(op) {
+            let delta = parseInt(document.getElementById('timeDelta').value);
+            let newMins = op === 'add' ? currentTotalMins + delta : currentTotalMins - delta;
+            updateClockDisplay(newMins, 'hourHand2', 'minuteHand2', 'digital2', 'sunMoon2');
+            playAudio(600, 100);
+            document.getElementById('infoMsg').innerText = `✅ تمت العملية بنجاح! راقب ساعة النتيجة.`;
+        }
+
+        // التبديل بين الأوضاع
+        function switchMode(mode) {
+            if (mode === 'lab') {
+                document.getElementById('lab-section').style.display = 'block';
+                document.getElementById('quiz-section').style.display = 'none';
+                document.getElementById('btnLab').classList.add('active');
+                document.getElementById('btnQuiz').classList.remove('active');
+            } else {
+                document.getElementById('lab-section').style.display = 'none';
+                document.getElementById('quiz-section').style.display = 'block';
+                document.getElementById('btnQuiz').classList.add('active');
+                document.getElementById('btnLab').classList.remove('active');
+                loadQuiz();
+            }
+        }
+
+        // نظام التحديات (Quiz Mode)
+        let quizStars = 0;
+        const challenges = [
+            { t: "بدأت حصة الرياضيات الساعة 9:00 واستمرت **30 دقيقة**. متى انتهت؟", h1: 9, m1: 0, ans: "9:30", options: ["9:15", "9:30", "10:00", "9:45"] },
+            { t: "تشير الساعة إلى 3:00، وأضفنا إليها **20 دقيقة** للعب. كم الوقت الآن؟", h1: 3, m1: 0, ans: "3:20", options: ["3:15", "3:20", "3:40", "4:00"] },
+            { t: "وقت الاستراحة يبدأ الساعة 10:00 وينتهي بعد **45 دقيقة**. متى ينتهي؟", h1: 10, m1: 0, ans: "10:45", options: ["10:30", "11:00", "10:45", "10:15"] },
+            { t: "الساعة الآن 2:00 ظهراً، مرّت **15 دقيقة** منذ بدء القصة. متى بدأت؟ (طرح)", h1: 1:45, m1: 0, ans: "1:45", options: ["1:45", "2:15", "1:30", "2:00"] }
+        ];
+
+        function loadQuiz() {
+            let q = challenges[Math.floor(Math.random() * challenges.length)];
+            document.getElementById('quizQuestion').innerText = q.t;
+            setTaskTime(q.h1, q.m1); // ضبط الساعة الأولى افتراضياً حسب السؤال
+
+            let optContainer = document.getElementById('quizOptions');
+            optContainer.innerHTML = '';
+            q.options.forEach(opt => {
+                let btn = document.createElement('button');
+                btn.className = 'quiz-opt-btn';
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    if (opt === q.ans) {
+                        quizStars++;
+                        document.getElementById('quizStars').innerText = `⭐ ${quizStars}`;
+                        document.getElementById('quizFeedback').style.color = '#00b894';
+                        document.getElementById('quizFeedback').innerText = '🎉 إجابة صحيحة يا بطل!';
+                        playAudio(800, 200);
+                        setTimeout(loadQuiz, 1500);
+                    } else {
+                        document.getElementById('quizFeedback').style.color = '#d63031';
+                        document.getElementById('quizFeedback').innerText = '❌ حاول مرة أخرى!';
+                        playAudio(300, 200);
+                    }
+                };
+                optContainer.appendChild(btn);
+            });
+        }
+
+        // مؤثرات صوتية بسيطة بدون ملفات خارجية
+        function playAudio(freq, duration) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                setTimeout(() => osc.stop(), duration);
+            } catch(e) {}
+        }
+
+        updateCustomTime();
+    </script>
+
+</body>
+</html>
